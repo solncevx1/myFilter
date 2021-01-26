@@ -86,16 +86,15 @@ class NewsViewController: UIViewController {
     }
     
     private func setupButton() {
-        let imageView = UIImageView()
-        imageView.image = UIImage(named: "dog")
-//        let newImageWithSepia = image?.setSepia()
-//        let newImageWithBlur = image?.setBlur()
-//         myFilter.setFilter(inpurImageView: imageView, filterKey: .Noir)
-        tonalButton.setBackgroundImage(imageView.image, for: .normal)
         
-//        self.tonalButton.setBackgroundImage(newImageWithSepia, for: .normal)
-//
-//        self.tonarButton.setBackgroundImage(newImageWithTonar, for: .normal)
+        let  image = UIImage(named: "dog")
+        let newImageWithNoir = image?.setNoir()
+        let newImageWithMono = image?.setMono()
+        let newImageWithTonal = image?.setTonal()
+        
+        alphaButton.setBackgroundImage(newImageWithNoir, for: .normal)
+        tonalButton.setBackgroundImage(newImageWithTonal, for: .normal)
+        tonarButton.setBackgroundImage(newImageWithMono, for: .normal)
     }
 }
 
