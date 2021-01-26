@@ -6,3 +6,10 @@
 //
 
 import Foundation
+
+struct RSSItem {
+    var name: String
+    var description: String
+    var publishDate: String
+    var image: String
+}

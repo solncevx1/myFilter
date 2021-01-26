@@ -1,16 +1,10 @@
-//
-//  Networking.swift
-//  FastNews
-//
-//  Created by Максим Солнцев on 11/10/20.
-//
 
 import Foundation
 
 class NewsDataSource {
     var articles: [Article] = []
     
-    func loadNews(complitionHandler: @escaping ([Article]) -> ()) {
+    func loadData(complitionHandler: @escaping ([Article]) -> ()) {
         let urlString = "http://newsapi.org/v2/top-headlines?country=ru&apiKey=a47e4642e8e54fe09f510182450c27b5"
         guard let url = URL(string: urlString) else {return}
         

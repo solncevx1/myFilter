@@ -11,6 +11,7 @@ import UIKit
 class ImageFilter {
     
     private var filter: CIFilter!
+    private var isFiltered: Bool = true
     lazy private var context: CIContext = {
         return CIContext(options: nil)
     }()
@@ -19,9 +20,9 @@ class ImageFilter {
         DispatchQueue.global(qos: .userInteractive).async {
             self.filter = CIFilter(name: filterKey.rawValue)
             
-            for image in images {
+            images.forEach { image in
                 let inputImage = CIImage(image: image.image!)
-    
+                
                 self.filter.setValue(inputImage, forKey: kCIInputImageKey)
                 let outputImage =  self.filter.outputImage!
                 if let cgImage = self.context.createCGImage(outputImage, from: outputImage.extent) {

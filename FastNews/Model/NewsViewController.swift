@@ -9,18 +9,15 @@ import UIKit
 
 class NewsViewController: UIViewController {
     
-    @IBOutlet private weak var horizontalScrollView: UIScrollView!
     @IBOutlet private weak var newsTableView: UITableView!
     @IBOutlet private weak var alphaButton: UIButton!
-    @IBOutlet weak var sepiaButton: UIButton!
-    @IBOutlet weak var tonarButton: UIButton!
+    @IBOutlet private weak var tonarButton: UIButton!
+    @IBOutlet private weak var tonalButton: UIButton!
     
     private var items: [RSSItem] = []
     private var itemsOfPage: [RSSItem] = []
     private var imageFromItems: [UIImageView] = []
-    private var numberOfPage: Int = 10
-    private var loadFlag: Bool = true
-    private var filter: CIFilter!
+    private var numberOfPage: Int = 3
     private var myFilter = ImageFilter()
     
     lazy var context: CIContext = {
@@ -33,35 +30,36 @@ class NewsViewController: UIViewController {
         newsTableView.dataSource = self
         loadData()
         setupButton()
-        
     }
     
     // MARK: - set filters
     
-    @IBAction func setAlpha(_ sender: UIButton) {
-        DispatchQueue.main.async {
-            self.myFilter.setFilter(images: self.imageFromItems, filterKey: .Tonal)
-            self.newsTableView.reloadData()
-        }
-    }
-    
-    @IBAction func setSepia(_ sender: UIButton) {
+    @IBAction func setTonal(_ sender: UIButton) {
         
-        myFilter.setFilter(images: imageFromItems, filterKey: .Mono)
+            myFilter.setFilter(images:imageFromItems , filterKey: .Tonal)
         
         DispatchQueue.main.async {
             self.newsTableView.reloadData()
         }
     }
     
-    @IBAction func setTonar(_ sender: UIButton) {
-        myFilter.setFilter(images: imageFromItems, filterKey: .Noir)
+    @IBAction func setMono(_ sender: UIButton) {
         
+        myFilter.setFilter(images:imageFromItems , filterKey: .Mono)
+
         DispatchQueue.main.async {
             self.newsTableView.reloadData()
         }
     }
-    
+
+    @IBAction func setNoir(_ sender: UIButton) {
+        
+        myFilter.setFilter(images:imageFromItems , filterKey: .Tonal)
+
+        DispatchQueue.main.async {
+            self.newsTableView.reloadData()
+        }
+    }
     
     private func loadData() {
         let parser = Parser()
@@ -88,14 +86,16 @@ class NewsViewController: UIViewController {
     }
     
     private func setupButton() {
-        let image = UIImage(named: "dog")
-        let newImageWithSepia = image?.setSepia()
-        let newImageWithBlur = image?.setBlur()
-        let newImageWithTonar = image?.setTonar()
+        let imageView = UIImageView()
+        imageView.image = UIImage(named: "dog")
+//        let newImageWithSepia = image?.setSepia()
+//        let newImageWithBlur = image?.setBlur()
+//         myFilter.setFilter(inpurImageView: imageView, filterKey: .Noir)
+        tonalButton.setBackgroundImage(imageView.image, for: .normal)
         
-        self.sepiaButton.setBackgroundImage(newImageWithSepia, for: .normal)
-        self.alphaButton.setBackgroundImage(newImageWithBlur, for: .normal)
-        self.tonarButton.setBackgroundImage(newImageWithTonar, for: .normal)
+//        self.tonalButton.setBackgroundImage(newImageWithSepia, for: .normal)
+//
+//        self.tonarButton.setBackgroundImage(newImageWithTonar, for: .normal)
     }
 }
 
@@ -115,30 +115,24 @@ extension NewsViewController: UITableViewDelegate, UITableViewDataSource {
             cell.newsImage.image = self.imageFromItems[indexPath.row].image
         }
         
-        if indexPath.row == self.items.count - 1 {
-            loadData()
-        }
-        
+
         return cell
     }
     
-    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        
-        if indexPath.row == itemsOfPage.count - 1  {
-            loadMore()
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if scrollView.contentOffset.y + scrollView.frame.size.height > scrollView.contentSize.height {
+                self.loadMore()
         }
     }
-    
+
     private func loadMore() {
-        
-        for _ in 0...5 {
-            var lastItem = itemsOfPage.count
+        for _ in 0...3 {
+            var lastItem = itemsOfPage.count - 1
             lastItem += 1
             itemsOfPage.append(items[lastItem])
         }
         DispatchQueue.main.async {
             self.newsTableView.reloadData()
         }
-        
     }
 }

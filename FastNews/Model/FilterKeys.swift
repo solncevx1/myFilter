@@ -6,3 +6,10 @@
 //
 
 import Foundation
+
+
+enum FiltersKeys: String {
+    case Mono = "CIPhotoEffectInstant"
+    case Tonal = "CIPhotoEffectTonal"
+    case Noir = "CIPhotoEffectNoir"
+}
